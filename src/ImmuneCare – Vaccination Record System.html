@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ImmuneCare – Vaccination Record System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eff2fb;--card:#fff;--ink:#12302d;--mut:#5d7471;--line:#dbe5e3;--pri:#0f6b61;--pri2:#d8efeb;--ind:#5b5bd6;--cor:#f0506e;--amb:#f5a524;--warn:#c2410c;--warn2:#fde8da;--bad:#b42335;--bad2:#fbe3e6;--ok:#2f7d32;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1b1a;--card:#162826;--ink:#e4efed;--mut:#93aeaa;--line:#274340;--pri:#4fc1b3;--pri2:#1b3f3b;--warn:#fb923c;--warn2:#3b2414;--bad:#f87185;--bad2:#3c1a20;--ok:#7bd37f}}
+:root[data-theme="dark"]{--bg:#0e1b1a;--card:#162826;--ink:#e4efed;--mut:#93aeaa;--line:#274340;--pri:#4fc1b3;--pri2:#1b3f3b;--warn:#fb923c;--warn2:#3b2414;--bad:#f87185;--bad2:#3c1a20;--ok:#7bd37f}
+[hidden]{display:none!important}html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Figtree,system-ui,sans-serif}
+h1,h2,h3{font-family:Newsreader,Georgia,serif;font-weight:600;margin:0}h1{font-size:28px}h2{font-size:22px}h3{font-size:17px}
+button,input,select{font:inherit;color:inherit}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:600}
+[data-theme=dark] .btn,:root:not([data-theme=light]) .btn{color:#06201d}
+.btn.ghost{background:transparent;color:var(--pri);border:1px solid var(--line)}.btn.sm{padding:4px 10px;font-size:13px}
+.btn:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+input,select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+label{display:block;font-size:13px;color:var(--mut);font-weight:600;margin-bottom:10px}label input,label select{margin-top:3px;color:var(--ink);font-weight:400}
+#login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.lbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;width:100%;max-width:400px}
+.brand{display:flex;gap:10px;align-items:center;margin-bottom:6px}.logo{width:34px;height:34px;border-radius:9px;background:var(--pri);display:grid;place-items:center;color:#fff;font-weight:700}
+#app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+aside{background:var(--card);border-right:1px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+aside nav button{display:block;width:100%;text-align:left;background:none;border:0;padding:9px 12px;border-radius:8px;cursor:pointer;color:var(--ink)}
+aside nav button.on{background:var(--pri2);color:var(--pri);font-weight:700}
+main{padding:24px;min-width:0;max-width:1100px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.stat b{font-family:Newsreader,serif;font-size:32px;display:block;line-height:1.1}.stat span{color:var(--mut);font-size:13px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--mut);font-weight:600;font-size:13px}
+.tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;background:var(--pri2);color:var(--pri)}.tag.w{background:var(--warn2);color:var(--warn)}.tag.b{background:var(--bad2);color:var(--bad)}
+.alert{padding:10px 14px;border-radius:9px;margin-bottom:8px;background:var(--warn2);color:var(--warn);font-weight:500}.alert.b{background:var(--bad2);color:var(--bad)}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}.mut{color:var(--mut)}
+.tl{border-left:2px solid var(--line);margin-left:6px;padding-left:16px}.tl>div{position:relative;margin-bottom:14px}.tl>div:before{content:"";position:absolute;left:-23px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--pri)}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;place-items:center;padding:16px;z-index:9;overflow:auto}
+#modal .box{background:var(--card);border-radius:14px;padding:22px;width:100%;max-width:560px;max-height:92vh;overflow:auto}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:9px;display:none;z-index:20}
+.err{color:var(--bad);font-size:13px;margin:0 0 10px}
+.cert{border:3px double var(--pri);padding:24px;text-align:center;position:relative}.cert:after{content:"ImmuneCare Clinic";position:absolute;inset:0;display:grid;place-items:center;font:700 54px Figtree;color:rgba(15,107,97,.07);transform:rotate(-20deg);pointer-events:none}
+.cert table{text-align:left}
+@media(max-width:760px){#app{grid-template-columns:1fr}aside{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center}aside nav{display:flex;flex-wrap:wrap;gap:2px}aside nav button{width:auto}main{padding:14px}}
+@media print{body *{visibility:hidden}#certbox,#certbox *{visibility:visible}#certbox{position:absolute;left:0;top:0;width:100%}}
+
+.card{border:0;border-radius:16px;box-shadow:0 2px 14px rgba(40,50,110,.07)}
+aside{border:0;box-shadow:2px 0 18px rgba(40,50,110,.06);padding:20px 14px}
+aside nav button{display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:12px;color:var(--mut);font-weight:500}
+aside nav button.on{background:var(--pri);color:#fff;box-shadow:0 6px 14px rgba(15,107,97,.3)}
+.bar{display:flex;gap:12px;align-items:center;margin-bottom:22px}.bar input{max-width:360px;border-radius:99px;padding:10px 18px;border:0;box-shadow:0 2px 10px rgba(40,50,110,.07)}.sp{flex:1}
+.stat{display:flex;gap:14px;align-items:center}.ico{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;flex:none}
+.dg{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:16px}.dg .card{margin:0}
+.pb{height:8px;background:var(--line);border-radius:9px;overflow:hidden;margin:5px 0 12px}.pb i{display:block;height:100%;border-radius:9px}
+.leg{display:flex;flex-direction:column;gap:7px;font-size:14px}.leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px}
+.li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.li:last-child{border:0}
+.av{width:38px;height:38px;border-radius:50%;background:var(--pri2);color:var(--pri);display:grid;place-items:center;font-weight:700;flex:none;font-size:13px}
+.li>div:first-child{display:flex;gap:10px;align-items:center}
+</style></head><body>
+<div id="login"><form class="lbox" onsubmit="return doLogin(event)">
+<div class="brand"><div class="logo">+</div><h1>ImmuneCare</h1></div>
+<p class="mut" style="margin-top:0">Sign in to manage immunisation records.</p>
+<label>Username<input id="lu" autocomplete="username" required></label>
+<label>Password<input id="lp" type="password" autocomplete="current-password" required></label>
+<p class="err" id="le"></p><button class="btn" style="width:100%">Sign in</button>
+<p class="mut" style="font-size:13px;margin-bottom:0">Demo accounts (password <b>demo123</b>): <b>admin</b>, <b>nurse</b> (Staff), <b>manager</b></p>
+</form></div>
+<div id="app" hidden></div><div id="modal"><div class="box" id="mbox"></div></div><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),T=()=>new Date().toISOString().slice(0,10);
+const addD=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
+const dTo=s=>Math.round((new Date(s)-new Date(T()))/864e5),ageOf=d=>Math.floor((Date.now()-new Date(d))/31557600000);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const VAC=['BCG','Hepatitis B','Polio (OPV)','MMR','COVID-19','Influenza','Tetanus (Td)'],LOW=20,EXPD=30;
+let seed=7;const rnd=n=>(seed=(seed*9301+49297)%233280)/233280*n|0;
+const S={user:null,view:'dash',q:'',sel:null,idle:null,
+users:[{u:'admin',name:'Dr. Mokoena',role:'Administrator',on:true},{u:'nurse',name:'Sr. Dlamini',role:'Staff',on:true},{u:'manager',name:'T. Van Wyk',role:'Manager',on:true}],
+batches:VAC.map((v,i)=>({lot:'LT'+(2400+i*7),vac:v,qty:[140,90,60,75,18,120,45][i],mfr:['Sanofi','GSK','Bio Farma','Merck','Pfizer','Seqirus','Sanofi'][i],mfd:addD(-200),exp:addD([300,20,200,150,90,25,400][i])})),
+patients:[],vax:[],aefi:[],audit:[]};
+const FN=['Thabo','Lerato','Sipho','Naledi','Pieter','Aisha','Kabelo','Zanele','Johan','Palesa','Lwazi','Megan'],LN=['Mokoena','Dlamini','Nkosi','Botha','Khumalo','Molefe','Naidoo','Sithole','Pretorius','Mahlangu'];
+for(let i=0;i<30;i++){const y=1940+rnd(80),m=1+rnd(12),d=1+rnd(28),p=n=>String(n).padStart(2,'0');
+S.patients.push({id:'P'+String(1001+i),name:FN[rnd(12)]+' '+LN[rnd(10)],nid:p(y%100)+p(m)+p(d)+String(5000+rnd(4999))+'08'+rnd(10),dob:`${y}-${p(m)}-${p(d)}`,sex:['Female','Male'][rnd(2)],tel:'07'+(10000000+rnd(89999999))});
+for(let k=0;k<1+rnd(3);k++){const v=VAC[rnd(7)];S.vax.push({id:S.vax.length+1,pid:'P'+(1001+i),vac:v,dose:1+rnd(2),lot:S.batches[VAC.indexOf(v)].lot,date:addD(-rnd(400)),by:k%2?'nurse':'admin'})}}
+S.aefi.push({vid:1,sev:'Mild',note:'Low-grade fever for 24h',date:addD(-3)});
+const log=a=>S.audit.unshift({t:new Date().toLocaleString('en-ZA'),u:S.user.u,a});
+const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display='none',2600)};
+const can=a=>({write:S.user.role==='Staff',inv:S.user.role==='Manager',usr:S.user.role==='Administrator'})[a];
+const NAV={Administrator:[['dash','Dashboard'],['pat','Patients'],['inv','Inventory'],['rep','Reports'],['usr','Users'],['log','Audit log']],Staff:[['dash','Dashboard'],['pat','Patients'],['inv','Inventory']],Manager:[['dash','Dashboard'],['pat','Patients'],['inv','Inventory'],['rep','Reports']]};
+function doLogin(e){e.preventDefault();const u=S.users.find(x=>x.u===$('#lu').value.trim());
+if(!u||$('#lp').value!=='demo123'){$('#le').textContent='Username or password is incorrect.';return false}
+if(!u.on){$('#le').textContent='This account is deactivated. Contact an administrator.';return false}
+S.user=u;S.view='dash';$('#login').hidden=true;$('#app').hidden=false;log('Signed in');bump();render();return false}
+function bump(){clearTimeout(S.idle);S.idle=setTimeout(()=>{logout('You were signed out after 30 minutes of inactivity.')},30*60*1000)}
+['click','keydown'].forEach(ev=>document.addEventListener(ev,()=>S.user&&bump()));
+function logout(msg){clearTimeout(S.idle);S.user=null;$('#app').hidden=true;$('#login').hidden=false;$('#lp').value='';$('#le').textContent=msg||'';closeM()}
+const go=v=>{S.view=v;S.sel=null;render()};
+function render(){const u=S.user,v=S.view;
+$('#app').innerHTML=`<aside><div class="brand"><div class="logo">+</div><h3>ImmuneCare</h3></div><nav>${NAV[u.role].map(([k,l])=>`<button class="${v===k?'on':''}" onclick="go('${k}')">${ic(k)}${l}</button>`).join('')}</nav>
+<div style="margin-top:auto;font-size:13px"><b>${esc(u.name)}</b><br><span class="mut">${u.role}</span><br><button class="btn ghost sm" style="margin-top:8px" onclick="logout()">Sign out</button></div></aside><main>${bar()}${({dash,pat,inv,rep,usr,log:logv})[v]()}</main>`}
+const alerts=()=>{const a=[];S.batches.forEach(b=>{const d=dTo(b.exp);if(d<=EXPD)a.push([d<0?'b':'',`${b.vac} batch ${b.lot} ${d<0?'has expired':'expires in '+d+' days'}.`])});
+VAC.forEach(v=>{const q=S.batches.filter(b=>b.vac===v&&dTo(b.exp)>=0).reduce((s,b)=>s+b.qty,0);if(q<LOW)a.push(['b',`Low stock: ${v} has ${q} units left (threshold ${LOW}).`])});return a};
+const IC={dash:'M3 3h8v8H3zM13 3h8v5h-8zM13 10h8v11h-8zM3 13h8v8H3z',pat:'M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8M22 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8',inv:'M21 8l-9-5-9 5v8l9 5 9-5zM3 8l9 5 9-5M12 13v8',rep:'M4 20V10M10 20V4M16 20v-7M22 20H2',usr:'M12 12a4 4 0 100-8 4 4 0 000 8M4 21a8 8 0 0116 0',log:'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01'};
+const ic=k=>`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${IC[k]}"/></svg>`;
+const ini=n=>esc(n.replace(/[^A-Za-z ]/g,'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase());
+const bar=()=>`<div class="bar"><input placeholder="Search patients by name or ID, then press Enter" aria-label="Search patients" onkeydown="if(event.key==='Enter'){S.q=this.value;go('pat')}"><span class="sp"></span><button class="btn ghost sm" onclick="go('dash')" title="Alerts">Alerts: ${alerts().length}</button><div class="av" title="${esc(S.user.name)}">${ini(S.user.name)}</div></div>`;
+function donut(v,c){const t=v.reduce((a,b)=>a+b,0),R=52,C=2*Math.PI*R;let o=0;return `<svg viewBox="0 0 140 140" width="150" role="img" aria-label="Patients by age group"><circle cx="70" cy="70" r="${R}" fill="none" stroke="var(--line)" stroke-width="16"/>${v.map((x,i)=>{const l=x/(t||1)*C,e=`<circle cx="70" cy="70" r="${R}" fill="none" stroke="${c[i]}" stroke-width="16" stroke-dasharray="${l} ${C-l}" stroke-dashoffset="${-o}" transform="rotate(-90 70 70)"/>`;o+=l;return e}).join('')}<text x="70" y="70" text-anchor="middle" font-size="28" font-family="Newsreader" fill="currentColor" font-weight="600">${t}</text><text x="70" y="88" text-anchor="middle" font-size="11" fill="var(--mut)">patients</text></svg>`}
+function line(v,lb){const W=360,H=160,m=Math.max(...v,1),x=i=>20+i*(W-40)/(v.length-1),y=a=>H-26-a/m*(H-50);let d=`M${x(0)} ${y(v[0])}`;for(let i=1;i<v.length;i++){const c=(x(i-1)+x(i))/2;d+=` C${c} ${y(v[i-1])} ${c} ${y(v[i])} ${x(i)} ${y(v[i])}`}
+return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Vaccinations per month"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b5bd6" stop-opacity=".3"/><stop offset="1" stop-color="#5b5bd6" stop-opacity="0"/></linearGradient></defs><path d="${d} L${x(v.length-1)} ${H-26} L${x(0)} ${H-26}Z" fill="url(#g)"/><path d="${d}" fill="none" stroke="#5b5bd6" stroke-width="3"/>${v.map((a,i)=>`<circle cx="${x(i)}" cy="${y(a)}" r="4" fill="#5b5bd6"/><text x="${x(i)}" y="${y(a)-9}" text-anchor="middle" font-size="11" fill="currentColor">${a}</text><text x="${x(i)}" y="${H-7}" text-anchor="middle" font-size="11" fill="var(--mut)">${lb[i]}</text>`).join('')}</svg>`}
+const due=()=>{const L={};S.vax.forEach(v=>{if(['Hepatitis B','MMR','Polio (OPV)','COVID-19'].includes(v.vac)&&+v.dose===1)L[v.pid+v.vac]=v});return Object.values(L).filter(v=>!S.vax.some(x=>x.pid===v.pid&&x.vac===v.vac&&+x.dose>1)).map(v=>{const d=new Date(v.date);d.setDate(d.getDate()+28);return{...v,due:d.toISOString().slice(0,10)}}).sort((a,b)=>a.due.localeCompare(b.due))};
+const pname=id=>(S.patients.find(p=>p.id===id)||{}).name||id;
+function dash(){const al=alerts(),dz=due(),od=dz.filter(x=>dTo(x.due)<0).length,td=S.vax.filter(x=>x.date===T()).length;
+const mo=[...Array(6)].map((_,i)=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-(5-i));return[d.toISOString().slice(0,7),d.toLocaleString('en',{month:'short'})]}),mv=mo.map(m=>S.vax.filter(x=>x.date.startsWith(m[0])).length);
+const ag=[0,0,0,0];S.patients.forEach(p=>{const a=ageOf(p.dob);ag[a<5?0:a<18?1:a<60?2:3]++});const AL=['0–4','5–17','18–59','60+'],AC=['#5b5bd6','#0f6b61','#f5a524','#f0506e'];
+const st=(n,l,c,t)=>`<div class="card stat"><div class="ico" style="background:${c}22;color:${c}">${ic(t)}</div><div><b>${n}</b><span>${l}</span></div></div>`;
+return `<div class="top"><div><h1>Good day, ${esc(S.user.name.split(' ').pop())}</h1><span class="mut">${new Date().toDateString()}</span></div></div>
+<div class="grid">${st(S.patients.length,'Registered patients','#5b5bd6','pat')}${st(S.vax.length,'Vaccinations recorded','#0f6b61','rep')}${st(td,'Given today','#f5a524','dash')}${st(od,'Overdue doses','#f0506e','log')}</div>
+<div class="dg"><div class="card"><h3>Vaccinations per month</h3>${line(mv,mo.map(m=>m[1]))}</div>
+<div class="card"><h3 style="margin-bottom:8px">Patients by age group</h3><div class="row" style="align-items:center;flex-wrap:nowrap">${donut(ag,AC)}<div class="leg">${AL.map((l,i)=>`<span><i style="background:${AC[i]}"></i>${l}: <b>${ag[i]}</b></span>`).join('')}</div></div></div></div>
+<div class="dg"><div class="card"><h3 style="margin-bottom:10px">Vaccine stock</h3>${VAC.map(v=>{const q=S.batches.filter(b=>b.vac===v&&dTo(b.exp)>=0).reduce((a,b)=>a+b.qty,0);return `<div style="display:flex;justify-content:space-between"><span>${v}</span><b>${q}</b></div><div class="pb"><i style="width:${Math.min(100,q/1.5)}%;background:${q<LOW?'var(--cor)':'var(--pri)'}"></i></div>`}).join('')}</div>
+<div class="card"><h3 style="margin-bottom:6px">Dose reminders</h3>${dz.slice(0,5).map(x=>{const d=dTo(x.due);return `<div class="li"><div><div class="av">${ini(pname(x.pid))}</div><div><b>${esc(pname(x.pid))}</b><br><span class="mut">${x.vac} · dose 2</span></div></div><span class="tag ${d<0?'b':d<=7?'w':''}">${d<0?'Overdue '+(-d)+'d':'In '+d+' days'}</span></div>`}).join('')||'<p class="mut">No doses are due.</p>'}</div></div>
+<div class="dg"><div class="card"><h3 style="margin-bottom:10px">Alerts</h3>${al.length?al.map(a=>`<div class="alert ${a[0]}">${esc(a[1])}</div>`).join(''):'<p class="mut">No alerts. Stock and expiry dates are healthy.</p>'}</div>
+<div class="card"><h3 style="margin-bottom:6px">Recent vaccinations</h3>${[...S.vax].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,5).map(x=>`<div class="li"><div><div class="av">${ini(pname(x.pid))}</div><div><b>${esc(pname(x.pid))}</b><br><span class="mut">${x.vac} · dose ${x.dose}</span></div></div><span class="tag">${x.date}</span></div>`).join('')}</div></div>`}
+function pat(){if(S.sel)return profile(S.sel);const q=S.q.toLowerCase(),r=S.patients.filter(p=>!q||p.name.toLowerCase().includes(q)||p.nid.includes(q)||p.id.toLowerCase()===q||p.id.toLowerCase().includes(q));
+return `<div class="top"><h1>Patients</h1>${can('write')?'<button class="btn" onclick="regForm()">Register patient</button>':''}</div>
+<div class="card"><input placeholder="Search by name, ID number or patient ID (e.g. P1004)" value="${esc(S.q)}" oninput="S.q=this.value;srch()" id="sq" aria-label="Search patients">
+<div class="tw" id="pl" style="margin-top:12px">${ptable(r)}</div></div>`}
+const ptable=r=>r.length?`<table><tr><th>Patient ID</th><th>Name</th><th>ID number</th><th>Age</th><th>Doses</th><th></th></tr>${r.map(p=>`<tr><td>${p.id}</td><td>${esc(p.name)}</td><td>${p.nid}</td><td>${ageOf(p.dob)}</td><td>${S.vax.filter(x=>x.pid===p.id).length}</td><td><button class="btn ghost sm" onclick="S.sel='${p.id}';render()">Open</button></td></tr>`).join('')}</table>`:'<p class="mut">No patient matches. Check the spelling or register a new patient.</p>';
+function srch(){const q=S.q.toLowerCase();$('#pl').innerHTML=ptable(S.patients.filter(p=>!q||p.name.toLowerCase().includes(q)||p.nid.includes(q)||p.id.toLowerCase().includes(q)))}
+function profile(id){const p=S.patients.find(x=>x.id===id),vs=S.vax.filter(x=>x.pid===id).sort((a,b)=>a.date.localeCompare(b.date));
+return `<div class="top"><div><button class="btn ghost sm" onclick="go('pat')">‹ All patients</button><h1 style="margin-top:8px">${esc(p.name)}</h1><span class="mut">${p.id} · ${p.sex} · born ${p.dob} · ${p.nid} · ${p.tel}</span></div>
+<div class="row" style="flex:none">${can('write')?`<button class="btn" onclick="vaxForm('${id}')">Record vaccination</button>`:''}<button class="btn ghost" onclick="cert('${id}')">Certificate</button></div></div>
+<div class="card"><h3 style="margin-bottom:12px">Immunisation history</h3>${vs.length?`<div class="tl">${vs.map(v=>{const a=S.aefi.filter(x=>x.vid===v.id);return `<div><b>${v.vac}</b> – dose ${v.dose} <span class="tag">${v.date}</span><br><span class="mut">Batch ${v.lot} · given by ${v.by}</span>${a.map(x=>`<br><span class="tag w">AEFI ${x.sev}</span> ${esc(x.note)}`).join('')}${can('write')?` <button class="btn ghost sm" onclick="aefiForm(${v.id})">Log adverse event</button>`:''}</div>`}).join('')}</div>`:'<p class="mut">No vaccinations recorded yet.</p>'}</div>`}
+function modal(h){$('#mbox').innerHTML=h;$('#modal').style.display='grid'}const closeM=()=>$('#modal').style.display='none';
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeM()});
+function regForm(){modal(`<h2>Register patient</h2><p class="err" id="me"></p><div class="row"><label>Full name<input id="f1"></label><label>ID / passport number<input id="f2"></label></div><div class="row"><label>Date of birth<input type="date" id="f3" max="${T()}"></label><label>Gender<select id="f4"><option>Female</option><option>Male</option><option>Other</option></select></label></div><label>Contact number<input id="f5"></label><div class="row"><button class="btn" onclick="reg()">Save patient</button><button class="btn ghost" onclick="closeM()">Cancel</button></div>`)}
+function reg(){const v=i=>$('#f'+i).value.trim(),e=m=>$('#me').textContent=m;
+if(!v(1)||!v(2)||!v(3)||!v(5))return e('Complete every field before saving.');
+const d=S.patients.find(p=>p.nid===v(2));if(d)return e(`A patient with this ID number already exists: ${d.name} (${d.id}).`);
+const p={id:'P'+(1001+S.patients.length),name:v(1),nid:v(2),dob:v(3),sex:v(4),tel:v(5)};S.patients.push(p);log('Registered patient '+p.id);closeM();toast('Patient registered: '+p.id);S.sel=p.id;render()}
+function vaxForm(id){modal(`<h2>Record vaccination</h2><p class="err" id="me"></p><label>Vaccine<select id="v1" onchange="lots()">${VAC.map(v=>`<option>${v}</option>`).join('')}</select></label><div class="row"><label>Dose number<select id="v2"><option>1</option><option>2</option><option>3</option><option>Booster</option></select></label><label>Date administered<input type="date" id="v3" value="${T()}" max="${T()}"></label></div><label>Batch / lot<select id="v4"></select></label><p class="mut" style="font-size:13px">Administered by ${esc(S.user.u)}. Stock reduces by one unit when saved.</p><div class="row"><button class="btn" onclick="vax('${id}')">Save vaccination</button><button class="btn ghost" onclick="closeM()">Cancel</button></div>`);lots()}
+function lots(){const l=S.batches.filter(b=>b.vac===$('#v1').value&&b.qty>0&&dTo(b.exp)>=0);$('#v4').innerHTML=l.length?l.map(b=>`<option value="${b.lot}">${b.lot} – ${b.qty} left, exp ${b.exp}</option>`).join(''):'<option value="">No usable stock</option>'}
+function vax(id){const lot=$('#v4').value;if(!lot)return $('#me').textContent='No in-date stock for this vaccine. Ask a manager to log a shipment.';
+S.batches.find(b=>b.lot===lot).qty--;S.vax.push({id:S.vax.length+1,pid:id,vac:$('#v1').value,dose:$('#v2').value,lot,date:$('#v3').value,by:S.user.u});log(`Recorded ${$('#v1').value} for ${id}`);closeM();toast('Vaccination recorded');render()}
+function aefiForm(vid){modal(`<h2>Log adverse event</h2><label>Severity<select id="a1"><option>Mild</option><option>Moderate</option><option>Severe</option></select></label><label>What happened<input id="a2"></label><div class="row"><button class="btn" onclick="aefi(${vid})">Save event</button><button class="btn ghost" onclick="closeM()">Cancel</button></div>`)}
+function aefi(vid){if(!$('#a2').value.trim())return;S.aefi.push({vid,sev:$('#a1').value,note:$('#a2').value.trim(),date:T()});log('Logged AEFI on vaccination #'+vid);closeM();toast('Adverse event logged');render()}
+function cert(id){const p=S.patients.find(x=>x.id===id),vs=S.vax.filter(x=>x.pid===id).sort((a,b)=>a.date.localeCompare(b.date));
+modal(`<div id="certbox"><div class="cert"><h2>Vaccination Certificate</h2><p class="mut">Certificate no. IC-${id}-${T().replace(/-/g,'')}</p><h3>${esc(p.name)}</h3><p>ID ${p.nid} · born ${p.dob}</p><div class="tw"><table><tr><th>Vaccine</th><th>Dose</th><th>Date</th><th>Batch</th></tr>${vs.map(v=>`<tr><td>${v.vac}</td><td>${v.dose}</td><td>${v.date}</td><td>${v.lot}</td></tr>`).join('')||'<tr><td colspan=4>No vaccinations recorded</td></tr>'}</table></div><p class="mut" style="font-size:12px">Issued ${T()} by ImmuneCare Clinic</p></div></div><div class="row" style="margin-top:12px"><button class="btn" onclick="print()">Print / save as PDF</button><button class="btn ghost" onclick="closeM()">Close</button></div>`)}
+function inv(){return `<div class="top"><h1>Inventory</h1>${can('inv')?'<button class="btn" onclick="shipForm()">Log shipment</button>':''}</div>${alerts().map(a=>`<div class="alert ${a[0]}">${esc(a[1])}</div>`).join('')}
+<div class="card tw"><table><tr><th>Vaccine</th><th>Batch</th><th>In stock</th><th>Manufacturer</th><th>Made</th><th>Expires</th><th>Status</th></tr>${S.batches.map(b=>{const d=dTo(b.exp);return `<tr><td>${b.vac}</td><td>${b.lot}</td><td>${b.qty}</td><td>${b.mfr}</td><td>${b.mfd}</td><td>${b.exp}</td><td>${d<0?'<span class="tag b">Expired</span>':d<=EXPD?`<span class="tag w">${d} days left</span>`:b.qty<LOW?'<span class="tag w">Low</span>':'<span class="tag">OK</span>'}</td></tr>`}).join('')}</table></div>`}
+function shipForm(){modal(`<h2>Log shipment</h2><p class="err" id="me"></p><label>Vaccine<select id="s1">${VAC.map(v=>`<option>${v}</option>`).join('')}</select></label><div class="row"><label>Batch / lot<input id="s2"></label><label>Quantity<input type="number" min="1" id="s3"></label></div><label>Manufacturer<input id="s4"></label><div class="row"><label>Manufacture date<input type="date" id="s5"></label><label>Expiry date<input type="date" id="s6"></label></div><div class="row"><button class="btn" onclick="ship()">Save shipment</button><button class="btn ghost" onclick="closeM()">Cancel</button></div>`)}
+function ship(){const v=i=>$('#s'+i).value.trim();if(!v(2)||+v(3)<1||!v(4)||!v(5)||!v(6))return $('#me').textContent='Complete every field. Quantity must be at least 1.';
+if(v(6)<=v(5))return $('#me').textContent='Expiry date must be after the manufacture date.';
+S.batches.push({lot:v(2),vac:v(1),qty:+v(3),mfr:v(4),mfd:v(5),exp:v(6)});log('Logged shipment '+v(2));closeM();toast('Shipment logged');render()}
+function rows(){const g={};S.vax.filter(x=>x.date===(S.rd||T())).forEach(x=>{const p=S.patients.find(q=>q.id===x.pid),a=ageOf(p.dob),ag=a<5?'0–4':a<18?'5–17':a<60?'18–59':'60+',k=x.vac+'|'+ag;g[k]=(g[k]||0)+1});return Object.entries(g).map(([k,n])=>[...k.split('|'),n])}
+function rep(){const r=rows();return `<div class="top"><h1>Daily report</h1><div class="row" style="flex:none"><input type="date" value="${S.rd||T()}" onchange="S.rd=this.value;render()" aria-label="Report date"><button class="btn" onclick="csv()">Export CSV</button></div></div>
+<div class="card tw">${r.length?`<table><tr><th>Vaccine</th><th>Age group</th><th>Administered</th></tr>${r.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join('')}<tr><th colspan=2>Total</th><th>${r.reduce((s,x)=>s+x[2],0)}</th></tr></table>`:'<p class="mut">No vaccinations on this date. Pick another date, or record one from a patient profile.</p>'}</div>`}
+function csv(){const t='Vaccine,Age group,Administered\n'+rows().map(r=>r.join(',')).join('\n')+'\n\nBatch,Vaccine,Quantity,Expiry\n'+S.batches.map(b=>[b.lot,b.vac,b.qty,b.exp].join(',')).join('\n');log('Exported report');
+modal(`<h2>Export CSV</h2><p class="mut">Copy this into a .csv file, or use Download.</p><textarea id="ct" style="width:100%;height:220px;font:13px monospace" readonly>${esc(t)}</textarea><div class="row" style="margin-top:10px"><button class="btn" onclick="$('#ct').select();document.execCommand('copy');toast('Copied')">Copy</button><button class="btn ghost" onclick="dl()">Download</button><button class="btn ghost" onclick="closeM()">Close</button></div>`)}
+function dl(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([$('#ct').value],{type:'text/csv'}));a.download='immunecare-report.csv';a.click()}
+function usr(){return `<div class="top"><h1>Users</h1><button class="btn" onclick="userForm()">Create user</button></div><div class="card tw"><table><tr><th>Username</th><th>Name</th><th>Role</th><th>Status</th><th></th></tr>${S.users.map((x,i)=>`<tr><td>${x.u}</td><td>${esc(x.name)}</td><td>${x.role}</td><td><span class="tag ${x.on?'':'b'}">${x.on?'Active':'Deactivated'}</span></td><td>${x.u===S.user.u?'':`<button class="btn ghost sm" onclick="tog(${i})">${x.on?'Deactivate':'Reactivate'}</button>`}</td></tr>`).join('')}</table></div>`}
+function userForm(){modal(`<h2>Create user</h2><p class="err" id="me"></p><div class="row"><label>Username<input id="u1"></label><label>Full name<input id="u2"></label></div><label>Role<select id="u3"><option>Staff</option><option>Manager</option><option>Administrator</option></select></label><div class="row"><button class="btn" onclick="addU()">Create user</button><button class="btn ghost" onclick="closeM()">Cancel</button></div>`)}
+function addU(){const u=$('#u1').value.trim(),n=$('#u2').value.trim();if(!u||!n)return $('#me').textContent='Enter a username and full name.';if(S.users.some(x=>x.u===u))return $('#me').textContent='That username is taken.';S.users.push({u,name:n,role:$('#u3').value,on:true});log('Created user '+u);closeM();toast('User created');render()}
+function tog(i){S.users[i].on=!S.users[i].on;log((S.users[i].on?'Reactivated ':'Deactivated ')+S.users[i].u);render()}
+function logv(){return `<div class="top"><h1>Audit log</h1></div><div class="card tw"><table><tr><th>Time</th><th>User</th><th>Action</th></tr>${S.audit.map(a=>`<tr><td>${a.t}</td><td>${a.u}</td><td>${esc(a.a)}</td></tr>`).join('')}</table></div>`}
+</script></body></html>
