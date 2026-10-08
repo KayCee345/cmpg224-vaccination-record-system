@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Verify certificate - ImmuneCare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900">
+<main class="mx-auto max-w-xl p-6">
+    <h1 class="text-2xl font-semibold">Certificate verification</h1>
+    <p class="mt-1 text-sm text-slate-600">Certificate <span class="font-mono" th:text="${certificateId}"></span></p>
+
+    <div th:if="${result.status().name() == 'VALID'}"
+         class="mt-6 rounded border border-green-300 bg-green-50 p-4 text-green-900">
+        <p class="font-medium">This certificate is genuine and up to date.</p>
+        <dl class="mt-3 text-sm">
+            <dt class="font-medium">Issued to</dt><dd th:text="${result.maskedName()}"></dd>
+            <dt class="mt-2 font-medium">Issued on</dt><dd th:text="${result.issuedOn()}"></dd>
+            <dt class="mt-2 font-medium">Doses certified</dt><dd th:text="${result.doseCount()}"></dd>
+        </dl>
+    </div>
+
+    <div th:if="${result.status().name() == 'SUPERSEDED'}"
+         class="mt-6 rounded border border-amber-300 bg-amber-50 p-4 text-amber-900">
+        <p class="font-medium">This certificate was issued by the clinic, but the vaccination records have changed since.</p>
+        <p class="mt-2 text-sm">Ask the clinic or sign in to ImmuneCare for a new certificate.</p>
+        <dl class="mt-3 text-sm">
+            <dt class="font-medium">Issued to</dt><dd th:text="${result.maskedName()}"></dd>
+            <dt class="mt-2 font-medium">Issued on</dt><dd th:text="${result.issuedOn()}"></dd>
+        </dl>
+    </div>
+
+    <div th:if="${result.status().name() == 'NOT_FOUND'}"
+         class="mt-6 rounded border border-red-300 bg-red-50 p-4 text-red-900">
+        <p class="font-medium">No certificate with this ID exists.</p>
+        <p class="mt-2 text-sm">Check the ID printed on the certificate. If it matches, treat the document as not genuine.</p>
+    </div>
+</main>
+</body>
+</html>

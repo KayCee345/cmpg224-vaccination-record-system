@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reports - ImmuneCare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900">
+<!-- Swap this page into Member 1's shared layout (navigation + styles) once it exists. -->
+<main class="mx-auto max-w-4xl p-6">
+    <h1 class="text-2xl font-semibold">Reports</h1>
+
+    <form method="get" th:action="@{/reports}" class="mt-6 flex flex-wrap items-end gap-3">
+        <label class="flex flex-col text-sm">
+            Report date
+            <input type="date" name="date" th:value="${date}" required
+                   class="mt-1 rounded border border-slate-300 px-3 py-2">
+        </label>
+        <button type="submit" class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">Show summary</button>
+    </form>
+
+    <div th:if="${error}" role="alert"
+         class="mt-4 rounded border border-red-300 bg-red-50 px-4 py-3 text-red-800" th:text="${error}"></div>
+
+    <section th:if="${report != null}" class="mt-6">
+        <h2 class="text-lg font-medium">
+            Daily vaccination summary for <span th:text="${report.date()}"></span>
+        </h2>
+        <p class="mt-1 text-sm text-slate-600">
+            <span th:text="${report.totalVaccinations()}"></span> dose(s) administered
+        </p>
+
+        <p th:if="${#lists.isEmpty(report.rows())}"
+           class="mt-4 rounded border border-slate-200 bg-white px-4 py-6 text-slate-600">
+            No vaccinations were recorded on this date. Pick another date to see a summary.
+        </p>
+
+        <table th:unless="${#lists.isEmpty(report.rows())}"
+               class="mt-4 w-full border-collapse overflow-hidden rounded bg-white text-left text-sm shadow-sm">
+            <thead class="bg-slate-100">
+            <tr>
+                <th class="px-4 py-2">Vaccine</th>
+                <th class="px-4 py-2">Age group</th>
+                <th class="px-4 py-2 text-right">Doses</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="row : ${report.rows()}" class="border-t border-slate-200">
+                <td class="px-4 py-2" th:text="${row.vaccineName()}"></td>
+                <td class="px-4 py-2" th:text="${row.ageGroup().label()}"></td>
+                <td class="px-4 py-2 text-right" th:text="${row.total()}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a th:href="@{/reports/daily/export.csv(date=${report.date()})}"
+           class="mt-4 inline-block rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700">
+            Download daily summary (CSV)
+        </a>
+    </section>
+
+    <section class="mt-10 border-t border-slate-200 pt-6">
+        <h2 class="text-lg font-medium">Vaccine inventory</h2>
+        <p class="mt-1 text-sm text-slate-600">
+            All batches with quantity, expiry date, expiry warning and low-stock flag.
+        </p>
+        <a th:href="@{/reports/inventory/export.csv}"
+           class="mt-4 inline-block rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700">
+            Download inventory (CSV)
+        </a>
+    </section>
+</main>
+</body>
+</html>
