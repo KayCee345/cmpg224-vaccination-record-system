@@ -1,0 +1,33 @@
+<!-- Add these to the <dependencies> block of the group's existing pom.xml.
+     Spring Boot already manages versions for the Spring, JUnit, Mockito, AssertJ and H2 artifacts. -->
+
+<!-- PDF generation (FR18) -->
+<dependency>
+    <groupId>com.github.librepdf</groupId>
+    <artifactId>openpdf</artifactId>
+    <version>1.3.43</version>
+</dependency>
+
+<!-- QR code on the certificate, used for verification (FR18) -->
+<dependency>
+    <groupId>com.google.zxing</groupId>
+    <artifactId>core</artifactId>
+    <version>3.5.3</version>
+</dependency>
+<dependency>
+    <groupId>com.google.zxing</groupId>
+    <artifactId>javase</artifactId>
+    <version>3.5.3</version>
+</dependency>
+
+<!-- Tests -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-test</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>test</scope>
+</dependency>
